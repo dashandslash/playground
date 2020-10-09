@@ -23,6 +23,7 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
             github.issues.addLabels({
+              owner: context.repo.owner,
               issue_number: context.issue.number,
               repo: context.repo.repo,
               labels: ['issue:rebase conflicts']
@@ -40,7 +41,7 @@ jobs:
                 name: 'issue:rebase conflicts'
               })
             }
-            await github.pulls.merge({
+            github.pulls.merge({
               owner: context.payload.repository.owner.login,
               repo: context.payload.repository.name,
               pull_number: context.payload.issue.number,
