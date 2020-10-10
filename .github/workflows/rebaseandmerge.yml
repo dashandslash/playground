@@ -5,8 +5,8 @@ name: CI
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the main branch
 on:
-  pull_request:
-    types: [opened]
+  pull_request: # When a PR is opened, edited, updated, or a label is added.
+    types: [opened, synchronize, labeled, edited]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
