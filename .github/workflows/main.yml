@@ -1,6 +1,7 @@
 on:
   pull_request:
-    types: [ labeled ]
+    types:
+      - labeled
 name: Rebase and Merge
 jobs:
   rebase_and_merge:
