@@ -30,14 +30,14 @@ jobs:
             })
     - name: Success Unlabel
       uses: actions/github-script@v3.0.0
-      if: success() && contains( github.event.issue.labels.*.name, 'issue:rebase conflicts')
+      if: success() && contains(github.event.issue.labels.*.name, 'issue:rebase conflicts')
       with:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
         script: |
           github.issues.removeLabel({
-            owner: context.payload.repository.owner.login
-            repo: context.payload.repository.name,
+            owner: context.repo.owner,
             issue_number: context.issue.number,
+            repo: context.repo.repo,
             name: 'issue:rebase conflicts'
           })
     - name: Merge
