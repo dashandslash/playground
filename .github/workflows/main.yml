@@ -16,11 +16,7 @@ jobs:
       uses: cirrus-actions/rebase@1.3.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: ON_FAILURE
-      if: ${{ failure() }}
-      run: |
-        echo "FAILURE"
-    - name: Label
+    - name: Failure Label
       uses: actions/github-script@v3.0.0
       if: ${{ failure() }}
       with:
@@ -32,23 +28,26 @@ jobs:
               repo: context.repo.repo,
               labels: ['issue:rebase conflicts']
             })
-    - name: ON_SUCCESS
-      if: ${{ success() }}
-      run: |
-        echo "SUCCESS"
+    - name: Success Unlabel
+      uses: actions/github-script@v3.0.0
+      if: success() && contains( github.event.pull_request.labels.*.name, 'issue:rebase conflicts')
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
+        script: |
+          if ('' == 'true') {
+            github.issues.removeLabel({
+              owner: context.payload.repository.owner.login
+              repo: context.payload.repository.name,
+              issue_number: context.issue.number,
+              name: 'issue:rebase conflicts'
+            })
+          }
     - name: Merge
       uses: actions/github-script@v3.0.0
+      if: success()
       with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
-            if ('${{ contains(github.event.pull_request.labels.*.name, 'issue:rebase conflicts') }}' == 'true') {
-              github.issues.removeLabel({
-                owner: context.payload.repository.owner.login,
-                repo: context.payload.repository.name,
-                issue_number: context.issue.number,
-                name: 'issue:rebase conflicts'
-              })
-            }
             github.pulls.merge({
               owner: context.payload.repository.owner.login,
               repo: context.payload.repository.name,
