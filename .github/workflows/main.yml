@@ -1,10 +1,7 @@
 on:
-  pull_request:
+  label:
     types:
-      - reopened
-      - opened
-      - labeled
-      - unlabeled 
+      - created
 name: Rebase and Merge
 jobs:
   rebase_and_merge:
