@@ -18,12 +18,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: ON_FAILURE
-      if: failure()
+      if: ${{ failure() }}
       run: |
         echo "FAILURE"
     - name: Label
       uses: actions/github-script@v3.0.0
-      if: failure()
+      if: ${{ failure() }}
       with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
@@ -34,7 +34,7 @@ jobs:
               labels: ['issue:rebase conflicts']
             })
     - name: ON_SUCCESS
-      if: success()
+      if: ${{ success() }}
       run: |
         echo "SUCCESS"
     - name: Merge
