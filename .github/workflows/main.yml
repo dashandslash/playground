@@ -1,6 +1,7 @@
 on:
   pull_request:
     types:
+      - reopened
       - opened
       - labeled
       - unlabeled 
