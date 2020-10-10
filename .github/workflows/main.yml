@@ -17,10 +17,10 @@ jobs:
       uses: cirrus-actions/rebase@1.3.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: TEST_FAILURE
+    - name: ON_FAILURE
       if: failure()
       run: |
-        echo "TEST_FAILURE"
+        echo "FAILURE"
     - name: Label
       uses: actions/github-script@v3.0.0
       if: failure()
@@ -33,6 +33,10 @@ jobs:
               repo: context.repo.repo,
               labels: ['issue:rebase conflicts']
             })
+    - name: ON_SUCCESS
+      if: success()
+      run: |
+        echo "SUCCESS"
     - name: Merge
       uses: actions/github-script@v3.0.0
       with:
