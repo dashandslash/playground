@@ -5,7 +5,7 @@ name: Rebase and Merge
 jobs:
   rebase_and_merge:
     name: RebaseAndMerge
-    if: github.event.pull_request != '' && github.event.label.name == 'RebaseAndMerge'
+    if: github.event.pull_request != '' && containts(github.event.pull_request.labels.*.name == 'RebaseAndMerge')
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the latest code
