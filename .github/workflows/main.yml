@@ -1,6 +1,7 @@
 on:
   pull_request:
     types:
+      - created
       - labeled
       - unlabeled 
 name: Rebase and Merge
