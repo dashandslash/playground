@@ -43,8 +43,8 @@ jobs:
           script: |
             if ('${{ contains(github.event.pull_request.labels.*.name, 'issue:rebase conflicts') }}' == 'true') {
               github.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                owner: context.payload.repository.owner.login,
+                repo: context.payload.repository.name,
                 issue_number: context.issue.number,
                 name: 'issue:rebase conflicts'
               })
