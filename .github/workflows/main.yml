@@ -1,11 +1,11 @@
-on: 
-  issue_comment:
-    types: [created]
+on:
+  pull_request:
+    types: [labeled]
 name: Rebase and Merge
 jobs:
   rebase_and_merge:
     name: RebaseAndMerge
-    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/merge')
+    if: github.event.pull_request != '' && github.event.label.name == 'RebaseAndMerge'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the latest code
@@ -22,6 +22,12 @@ jobs:
       with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
+            github.issues.removeLabel({
+              owner: context.repo.owner,
+              issue_number: context.issue.number,
+              repo: context.repo.repo,
+              name: 'RebaseAndMerge'
+            })
             github.issues.addLabels({
               owner: context.repo.owner,
               issue_number: context.issue.number,
@@ -34,7 +40,7 @@ jobs:
       with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
-            if ('${{ contains(github.event.issue.labels.*.name, 'issue:rebase conflicts') }}' == 'true') {
+            if ('${{ contains(github.event.pull_request.labels.*.name, 'issue:rebase conflicts') }}' == 'true') {
               github.issues.removeLabel({
                 owner: context.repo.owner,
                 issue_number: context.issue.number,
@@ -45,7 +51,7 @@ jobs:
             github.pulls.merge({
               owner: context.payload.repository.owner.login,
               repo: context.payload.repository.name,
-              pull_number: context.payload.issue.number,
+              pull_number: context.payload.pull_request.number,
               merge_method: 'merge'
             })
 
