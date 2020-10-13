@@ -1,8 +1,7 @@
 on:
   pull_request:
     types: [labeled]
-    branches:
-      - '**'
+
 name: Rebase and Merge
 jobs:
   rebase_and_merge:
